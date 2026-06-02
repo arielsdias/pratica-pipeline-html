@@ -1,0 +1,21 @@
+name: Primeiro Pipeline HTML
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Verificar arquivo HTML
+        run: |
+          echo "Verificando se o arquivo index.html existe"
+          ls
+          test -f index.html
+          echo "Arquivo index.html encontrado com sucesso"
