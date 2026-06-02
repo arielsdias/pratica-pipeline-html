@@ -1,4 +1,4 @@
-name: Pipeline HTML Multi-Stage
+name: Pipeline com Artefato
 
 on:
   push:
@@ -13,35 +13,23 @@ jobs:
       - name: Baixar código do repositório
         uses: actions/checkout@v4
 
-      - name: Validar existência do HTML
+      - name: Ler versão da aplicação
         run: |
-          echo "Etapa de build iniciada"
-          test -f index.html
-          echo "Arquivo index.html encontrado"
+          echo "Versão da aplicação:"
+          cat VERSION
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Baixar código do repositório
-        uses: actions/checkout@v4
-
-      - name: Testar conteúdo da página
+      - name: Criar pasta do artefato
         run: |
-          echo "Etapa de testes iniciada"
-          grep "Minha primeira aplicação" index.html
-          echo "Texto esperado encontrado no HTML"
+          mkdir pacote
+          cp index.html pacote/
+          cp VERSION pacote/
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Baixar código do repositório
-        uses: actions/checkout@v4
-
-      - name: Simular deploy
+      - name: Compactar artefato
         run: |
-          echo "Etapa de deploy iniciada"
-          echo "Aplicação HTML pronta para publicação"
+          zip -r aplicacao-html.zip pacote
+
+      - name: Publicar artefato no GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: aplicacao-html
+          path: aplicacao-html.zip
