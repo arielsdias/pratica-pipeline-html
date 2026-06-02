@@ -1,4 +1,4 @@
-name: Pipeline com Artefato
+name: Pipeline Microsservicos
 
 on:
   push:
@@ -6,30 +6,26 @@ on:
       - main
 
 jobs:
-  build:
+
+  usuarios:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar código do repositório
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Ler versão da aplicação
+      - name: Validar Servico Usuarios
         run: |
-          echo "Versão da aplicação:"
-          cat VERSION
+          echo "Validando servico de usuarios"
+          test -f service-usuarios/index.html
 
-      - name: Criar pasta do artefato
+  catalogo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar Servico Catalogo
         run: |
-          mkdir pacote
-          cp index.html pacote/
-          cp VERSION pacote/
+          echo "Validando servico de catalogo"
+          test -f service-catalogo/index.html
 
-      - name: Compactar artefato
-        run: |
-          zip -r aplicacao-html.zip pacote
-
-      - name: Publicar artefato no GitHub Actions
-        uses: actions/upload-artifact@v4
-        with:
-          name: aplicacao-html
-          path: aplicacao-html.zip
