@@ -1,4 +1,4 @@
-name: Continuous Delivery
+name: Continuous Deployment
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build:
+  deploy:
 
     runs-on: ubuntu-latest
 
@@ -32,3 +32,7 @@ jobs:
         with:
           name: calculadora
           path: release/
+
+      - name: Simular deploy
+        run: |
+          echo "Deploy realizado automaticamente"
